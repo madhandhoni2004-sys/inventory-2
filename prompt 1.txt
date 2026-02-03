@@ -1,0 +1,266 @@
+Human Resource Application
+
+1. REGIONS ↔ COUNTRIES regions.region_id (PK) → countries.region_id (FK) Relationship: One Region has many Countries (1 : M) Each Country belongs to one Region 📌 
+
+2. COUNTRIES ↔ LOCATIONS countries.country_id (PK) → locations.country_id (FK) Relationship: One Country has many Locations (1 : M) Each Location is in one Country 📌 
+
+3. LOCATIONS ↔ DEPARTMENTS locations.location_id (PK) → departments.location_id (FK) Relationship: One Location hosts many Departments (1 : M) Each Department is located at one Location 📌 
+
+4. DEPARTMENTS ↔ EMPLOYEES departments.department_id (PK) → employees.department_id (FK) Relationship: One Department has many Employees (1 : M) Each Employee belongs to one Department 📌 
+
+5. DEPARTMENTS ↔ EMPLOYEES (Manager Relationship) employees.employee_id (PK) → departments.manager_id (FK) Relationship: One Employee can be a Manager of multiple Departments Each Department has zero or one Manager 
+
+6. EMPLOYEES ↔ JOBS jobs.job_id (PK) → employees.job_id (FK) Relationship: One Job can be held by many Employees (1 : M) Each Employee has one Job 📌 
+
+7. EMPLOYEES ↔ JOB_HISTORY employees.employee_id (PK) → job_history.employee_id (FK) Relationship: One Employee can have many Job History records (1 : M) Each Job History refers to one Employee 📌 
+
+8. JOBS ↔ JOB_HISTORY jobs.job_id (PK) → job_history.job_id (FK) Relationship: One Job can appear in many Job History records (1 : M) Each Job History entry refers to one Job 📌 
+
+9. DEPARTMENTS ↔ JOB_HISTORY departments.department_id (PK) → job_history.department_id (FK) Relationship: One Department can have multiple Job History entries Each job history record belongs to one department 📌 
+
+10. EMPLOYEES ↔ EMPLOYEES (Manager of Employees) employees.employee_id (PK) → employees.manager_id (FK) Relationship: One Employee (manager) manages many employees Each employee has zero or one manager (This is a recursive relationship)
+
+
+Human Resource application of Capg Organization recruit employees and mapping them into appropriate department with the specified salary scale. Employees are allowed to move from one department to another based on the organization demand. Organization stores employee’s all over experiences as a Job History. 
+OVERVIEW 											TEAM SIZE: 5
+Human Resource team will add new position according to organization demand.  And responsible for below operations.
+1.	Hiring the employees. Assign employee departments.
+2.	Fixing employee’s commission percentage. Only employees in sales department eligible for commission percentage.
+3.	Employees salary should be offered based on the Job Title, and it should not exceed the min and max limit. HR need to ensure to retain the salary boundary.
+There are few responsibilities to employees as well, which is mentioned below:
+1.	Providing their personal information like first name, last name, email and phone number.
+2.	Update their email and phone number if there are any changes.
+3.	Can view their department details.
+4.	They can see the list of employees working on same location. They are allowed to see only other employee’s email and phone number if they belong to same location.
+There are 3 different roles in this portal: Admin, HR team and employee. You need provide proper responsibilities to all 3 roles using security framework.
+Considering the above business case, you need to create below endpoints:
+Step1: 
+1.	All Rest API request and response format must be in JSON.
+2.	200, 201, 400, 404, 401, 500, 505 – use appropriate http status code in your response object.
+3.	Handle the Rest exceptions globally using Rest exception handler for all endpoints. 
+4.	Sample Error Responses are shown in below table, participants to identify error paths for all the Endpoints.
+5.	Test your Rest Api using Junit and Mockito.
+6.	You should not alter database schema under any circumstances except wherever changes are mentioned explicitly.
+7.	All PUT and POST requests are secured
+
+
+
+i want you to create a spring boot application with some dependencies like
+spring web, data jpa, security, validation, postgres driver
+
+the project structure should be like
+- model/pojo
+- service layer
+- dao
+- dto
+- junit test case
+
+
+i want global exception for this application
+
+Endpoints	HTTP Verb/Method	Description	Success Response	Error Response
+/api/v1/country	POST	Add new country	String: Record Created Successfully	{"timeStamp":"2023-06-08", "message": "Validation failed …”}
+/api/v1/country	PUT	Modify the country	String: Record Modified Successfully	{"timeStamp":"2023-06-08", "message": "Validation failed …”}
+/api/v1/country	GET	List all Country	Collection of Country	
+/api/v1/country/{id}	DELETE	Delete country by Id.		
+/api/v1/country/{id}	GET	Search Country by Id.	Country	
+
+
+
+Endpoints	HTTP Verb/Method	Description	Success Response	Error Response
+/api/v1/region	POST	Add new Region	String: Record Created Successfully	{"timeStamp":"2023-06-08", "message": "Validation failed …”}
+/api/v1/region	PUT	Modify the Region	String: Record Modified Successfully	{"timeStamp":"2023-06-08", "message": "Validation failed …”}
+/api/v1/region	GET	List all Region	Collection of Region	
+/api/v1/region/{region_id}	GET	Get Region by Id.	Region	
+/api/v1/region/{region_id}	DELETE	Delete Region by Id.	String: Record deleted Successfully	
+
+
+
+Endpoints	HTTP Verb/Method	Description	Success Response	Error Response
+/api/v1/location	POST	Add new location	String: Record Created Successfully	{"timeStamp":"2023-06-08", "message": "Validation failed …”}
+/api/v1/location	PUT	Modify location	String: Record Modified Successfully	{"timeStamp":"2023-06-08", "message": "Validation failed …”}
+/api/v1/ location	GET	Get All locations	Collection of Location.	
+/api/v1/ location/{location_id}	GET	Search location by Id.	Location	
+/api/v1/ location/{location_id}	DELETE	Delete location by Id.	String: Record deleted Successfully	
+Endpoints	HTTP Verb/
+Method	Description	Success Response	Error Response
+/api/v1/job	POST	Add new Job	String: Record Created Successfully	{"timeStamp":"2023-06-08", "message": "Validation failed …”}
+/api/v1/job	PUT	Modify Job	String: Record Modified Successfully	{"timeStamp":"2023-06-08", "message": "Validation failed …”}
+/api/v1/job	GET	Get all Jobs	Collection of Job 	
+/api/v1/job/{minsalary/{maxsalary}	PUT	Update min and max 
+salary if any changes	Job	
+/api/v1/job/{job_id}	DELETE	Delete by Job Id.	String: Record deleted Successfully	
+
+
+Endpoints	HTTP Verb/
+Method	Description	Success Response	Error Response
+/api/v1/employees	POST	Add new Employee	String: Record Created Successfully	{"timeStamp":"2023-06-08", "message": "Validation failed …”}
+/api/v1/employees	PUT	Modify Employee	String: Record Modified Successfully	{"timeStamp":"2023-06-08", "message": "Validation failed …”}
+/api/v1/employees/{job_id}	PUT	Assign employees job using JOB ID	String: Record Modified Successfully	{"timeStamp":"2023-06-08", "message": "Validation failed …”}
+/api/v1/employees/{manager_id}	PUT	Assign employee’s manager.	String: Record Modified Successfully	{"timeStamp":"2023-06-08", "message": "Validation failed …”}
+/api/v1/employees/{department_id}	PUT	Assign employee’s department.	String: Record Modified Successfully	{"timeStamp":"2023-06-08", "message": "Validation failed …”}
+/api/v1/employees/{department_id}/
+{sales_percentage}	PUT	Assign employee’s department and update the percentage for sales department employees	String: Record Modified Successfully	{"timeStamp":"2023-06-08", "message": "Validation failed …”}
+/api/v1/employees/findfname/{firstname}	GET	findByFirstName	Employee	
+/api/v1/employees/findemail/{email}	GET	findByEmail	Employee	
+/api/v1/employees/findphone/{phone}	GET	findByPhoneNumber	Employee	
+/api/v1/employees/ findAllEmployeeWithNoCommission	GET	findAllEmployeeWithNoCommission	Employee	
+/api/v1/employees/ findTotalCommissionIssued
+ToEmployee/{department_id}	GET	findTotalCommissionIssued
+ToEmployeeByDepartment	200: {
+“departmentid” : 1200,
+“sum” : 23000
+}	
+/api/v1/employees/listAllEmployees/
+{department_id}	GET	listAllEmployeesByDepartment	Collection of Employees	
+/api/v1/employees/employees_departmentwise_count	GET	countAllEmployeesGroupByDepartment	200:[{
+“departmentname” : “Treasury”,
+“count” : 23},
+:[{
+“departmentname” : “Manufacturing”,
+“count” : 34},
+……]
+	
+/api/v1/employees/listallmanagerdetails	GET	listAllManagerDetails	Employee	
+/api/v1/ employees /locationwisecountofemployees	GET	countAllEmployeesGroupByLocation	Employee	
+/api/v1/employees/{empid}/findmaxsalaryofjob	GET	findMaxSalaryOfJobByEmployeeId	200:{
+“Job Title”: “Finance Manager”,
+“max salary” : 
+12000
+}	
+/api/v1/ employees/{email}	PUT	Update employee email	String: Record Modified Successfully	{"timeStamp":"2023-06-08", "message": "Validation failed …”}
+/api/v1/ employees/{phonenumber}	PUT	Update employee phone number	String: Record Modified Successfully	{"timeStamp":"2023-06-08", "message": "Validation failed …”}
+/api/v1/employees/findAllOpenPositions	GET	Find All Open Positions which was not filled	Collection of Job	
+/api/v1/ employees /findAllOpenPositions/{department_id}	GET	Find All Open Positions which was not filled in a particular department.	Collection of Job	
+/api/v1/employees/listallemployeebyhiredate/{from_hiredate}/{to_hiredate}	GET	List All employee hired on particular date range.	Collection of Employees	
+/api/v1/employees/{emp_id}	DELETE	Delete by employee Id.		
+
+Endpoints	HTTP Verb/Method	Description	Success Response	Error Response
+/api/v1/job_history/{empid}/{startdate}/
+{job_id}/{department_id}	POST	Add entry in job history, if employee moves from one department to another with same or different Job Title. Also when new employees added add job history.	String: Record Created Successfully	{"timeStamp":"2023-06-08", "message": "Validation failed …”}
+/api/v1/job_history/{empid}/{enddate}	PUT	Job History Modified	String: Record Modified Successfully	{"timeStamp":"2023-06-08", "message": "Validation failed …”}
+/api/v1/job_history/totalyearsofexperience/{emp_id}	GET	findExperienceOfEmployees	200: {
+“years” : 1,
+“month” : 11,
+“days” : 12
+}	
+/api/v1/job_history/lessthanoneyearexperience/{emp_id}	GET	listAllEmployeesWithLessThanOneYearExperience	200: {
+“years” : 0,
+“month” : 11,
+“days” : 12
+}	
+ 
+
+Endpoints	HTTP Verb/Method	Description	Success Response	Error Response
+/api/v1/department	POST	Add new department	String: Record Created Successfully	{"timeStamp":"2023-06-08", "message": "Validation failed …”}
+/api/v1/department	PUT	Modify department	String: Record Modified Successfully	{"timeStamp":"2023-06-08", "message": "Validation failed …”}
+/api/v1/department/findmaxsalary/{department_id}	GET	Employee max salary in that department.	200:{
+“department_name”: “Treasury”,
+“max salary” : 
+12000
+}	
+/api/v1/department/findminsalary/{department_id}	GET	Employee min salary in that department.	200:{
+“department_name”: “Treasury”,
+“min salary” : 
+300
+}	
+/api/v1/departments/{empid}	GET	Get all department details where employees worked in.	Collection of Departments.	
+/api/v1/departments/{department_id}	DELETE	Delete by department Id.		
+
+
+
+i want these all endpoints in the spring boot application
+
+create database HR;
+DROP TABLE IF EXISTS regions;
+create table regions (
+  region_id decimal not null,
+  region_name varchar(25),
+  primary key (region_id)
+);
+
+DROP TABLE IF EXISTS countries;
+create table countries (
+  country_id char(4) not null,
+  country_name varchar(60),
+  region_id decimal,
+  primary key (country_id),
+  foreign key (region_id)
+  references regions (region_id)
+);
+
+DROP TABLE IF EXISTS locations;
+create table locations (
+  location_id decimal(4, 0) not null,
+  street_address varchar(40),
+  postal_code varchar(12),
+  city varchar(30) not null,
+  state_province varchar(25),
+  country_id char(4),
+  primary key (location_id),
+  foreign key (country_id)
+  references countries (country_id)
+);
+
+DROP TABLE IF EXISTS departments;
+create table departments (
+  department_id decimal(4, 0) not null,
+  department_name varchar(30) not null,
+  manager_id decimal(6, 0),
+  location_id decimal(4, 0),
+  primary key (department_id),
+  foreign key (location_id)
+  references locations (location_id)
+);
+
+DROP TABLE IF EXISTS jobs;
+create table jobs (
+  job_id varchar(10) not null,
+  job_title varchar(35) not null,
+  min_salary decimal(6, 0),
+  max_salary decimal(6, 0),
+  primary key (job_id)
+);
+
+DROP TABLE IF EXISTS employees;
+create table employees (
+  employee_id decimal(6, 0) not null,
+  first_name varchar(20),
+  last_name varchar(25) not null,
+  email varchar(25) not null,
+  phone_number varchar(20),
+  hire_date date not null,
+  job_id varchar(10) not null,
+  salary decimal(8, 2),
+  commission_pct decimal(2, 2),
+  manager_id decimal(6, 0),
+  department_id decimal(4, 0),
+  primary key (employee_id),
+  unique (email),
+  foreign key (job_id)
+  references JOBS (job_id),
+  foreign key (manager_id)
+  references employees (employee_id),
+  foreign key (department_id)
+  references departments (department_id)
+);
+
+
+  
+  DROP TABLE IF EXISTS job_history;
+  create table job_history (
+  employee_id decimal(6, 0) not null,
+  start_date date not null,
+  end_date date not null,
+  job_id varchar(10) not null,
+  department_id decimal(4, 0),
+  foreign key (employee_id)
+  references employees (employee_id),
+  foreign key (job_id)
+  references jobs (job_id),
+  foreign key (department_id)
+  references departments (department_id),
+  primary key (employee_id, start_date)
+);
+
+
